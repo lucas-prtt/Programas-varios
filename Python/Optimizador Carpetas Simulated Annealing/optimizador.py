@@ -114,7 +114,9 @@ for line in file.readlines():
 materias = set(mat for dia in horarios.values() for mat in dia)
 
 if(len(materias) > cantidadDeCarpetas * maxMateriasPorCarpeta):
-    raise Exception(f"No fue posible organizar {len(materias)} en {cantidadDeCarpetas} carpetas de hasta {maxMateriasPorCarpeta} materias cada una")
+    print(f"No fue posible organizar {len(materias)} materias en {cantidadDeCarpetas} carpetas de hasta {maxMateriasPorCarpeta} materias cada una")
+    input()
+    exit()
 
 def getInitialSolution(materias:set[str]):
     materias = list(materias)
@@ -158,7 +160,7 @@ def executeSimulatedAnnealing():
         temperature *= coolingRate
         i+=1
     print(f"Simulated Annealing ejecutado con {i} iteraciones") 
-    if(bestScore != 99999999999):
+    if(isValid(bestSolution)):
         return bestSolution, bestScore
     else:
         raise Exception(f"No se pudo encontrar una solucion que respete el maximo de {maxCarpetasPorDia} carpetas por dia y {maxMateriasPorCarpeta} materias por carpeta")
