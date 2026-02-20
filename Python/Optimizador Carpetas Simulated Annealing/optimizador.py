@@ -7,6 +7,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 file = open(os.path.join(script_dir, "materias.cfg"))
 configFile = open(os.path.join(script_dir, "settings.cfg"))
 config = dict()
+materiasJuntas = []
 for line in configFile.readlines():
     if(line.strip().startswith("#") or line.strip()==""): 
         continue
@@ -96,9 +97,17 @@ def score(carpetas:list[Carpeta]):
 
 
 def isValid(carpetas:list[Carpeta]):
+    def juntas(mat1, mat2):
+        for carpeta in carpetas:
+            if carpeta.materias.__contains__(mat1) and not carpeta.materias.__contains__(mat2):
+                return False
+        return True
     for dia in dias:
         qcarpetas = len(carpetasLlevadas(carpetas, horarios[dia]))
         if(qcarpetas > maxCarpetasPorDia):
+            return False
+    for parJuntas in materiasJuntas:
+        if not (juntas(parJuntas[0], parJuntas[1])):
             return False
     return True
 
@@ -106,6 +115,13 @@ def isValid(carpetas:list[Carpeta]):
 dias = []
 horarios = dict()
 for line in file.readlines():
+    if(line.strip().startswith("$")):
+        parMatJuntas = line.strip().strip("$").strip().split(",")
+        parMatJuntas = tuple(map(str.strip, parMatJuntas))
+        materiasJuntas.append(parMatJuntas)
+        continue
+    if(line.strip() == ""):
+        continue
     dia, materias = line.split("=")
     materias = set(map(str.strip, materias.split(",")))
     horarios[dia]=materias
