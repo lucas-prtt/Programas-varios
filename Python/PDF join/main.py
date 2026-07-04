@@ -1,7 +1,7 @@
 from pathlib import Path
 from pypdf import PdfWriter
 # Hecho con IA para sacarme de un apuro
-
+#pip install pypdf
 
 SALIDA = "PDF_UNIDO.pdf"
 
